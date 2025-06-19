@@ -49,7 +49,7 @@ def hash_password(password: str) -> str:
     return pwd_context.hash(password)
 
 def authenticate_user(db: Session, username: str, password: str):
-    user = db.query(models.User).filter(models.User.name == username).first()
+    user = db.query(models.User).filter(models.User.email == username).first()
     print("USER FOUND:", user.email if user else "No user")
     print("USER HASHED PASSWORD:", user.hashed_password if user else "No password")
 

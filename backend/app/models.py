@@ -1,6 +1,5 @@
 # app/models.py
 from sqlalchemy import Column, Integer, String, ForeignKey, Text, DateTime,Enum,Boolean
-
 from sqlalchemy.orm import relationship
 from app.database import Base
 from datetime import datetime
@@ -13,7 +12,6 @@ class User(Base):
     email = Column(String, unique=True, index=True)
     hashed_password = Column(String)
     is_mentor = Column(Boolean, default=False)
-
 
 class MentorshipStatus(str, enum.Enum):
     pending = "pending"
