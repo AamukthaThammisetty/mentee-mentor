@@ -11,7 +11,7 @@ class Token(BaseModel):
 class LoginInput(BaseModel):
     email: EmailStr
     password: str
-
+   
 # ------------------- USER -------------------
 
 class UserBase(BaseModel):
@@ -22,6 +22,10 @@ class UserBase(BaseModel):
 class UserUpdate(BaseModel):
     name: Optional[str] = None
     is_mentor: Optional[bool] = None
+    bio: Optional[str] = None
+    skills: Optional[List[str]] = []
+    avatar: Optional[str] = None
+
 
 class UserPublic(BaseModel):
     id: int
@@ -39,11 +43,12 @@ class UserCreate(BaseModel):
     is_mentor: bool
 
 class UserOut(BaseModel):
-    id: int
     name: str
-    email: EmailStr
+    email: str
     is_mentor: bool
-
+    bio: Optional[str] = ""
+    skills: Optional[List[str]] = []
+    avatar: Optional[str] = None
     class Config:
         orm_mode = True
 # ------------------- MENTORSHIP REQUESTS -------------------

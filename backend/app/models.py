@@ -2,16 +2,21 @@
 from sqlalchemy import Column, Integer, String, ForeignKey, Text, DateTime,Enum,Boolean
 from sqlalchemy.orm import relationship
 from app.database import Base
+from sqlalchemy.dialects.postgresql import JSONB
 from datetime import datetime
 import enum
 
 class User(Base):
     __tablename__ = "users"
-    id = Column(Integer, primary_key=True, index=True)
+
+    id = Column(String, primary_key=True, index=True)
     name = Column(String)
     email = Column(String, unique=True, index=True)
     hashed_password = Column(String)
     is_mentor = Column(Boolean, default=False)
+    bio = Column(String, default="")
+    skills = Column(JSONB, nullable=True)
+    avatar = Column(Text, nullable=True)
 
 class MentorshipStatus(str, enum.Enum):
     pending = "pending"

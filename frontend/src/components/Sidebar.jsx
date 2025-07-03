@@ -8,14 +8,20 @@ const Sidebar = ({ email, onLogout }) => {
         <h1 className="text-xl font-bold mb-6">Mentor Connect</h1>
         <nav className="space-y-4">
           <Link to="/dashboard" className="flex items-center gap-2 text-gray-700 hover:text-black">
-            <Home className="w-4 h-4" /> Home
+            <Home className="w-4 h-4" /> Dashboard
           </Link>
-          <div className="flex items-center gap-2 text-gray-500">
-            <Calendar className="w-4 h-4" /> Calendar
-          </div>
-          <div className="flex items-center gap-2 text-gray-500">
-            <Clock className="w-4 h-4" /> Upcoming
-          </div>
+          <Link to="/profile" className="flex items-center gap-2 text-gray-700 hover:text-black">
+            <Calendar className="w-4 h-4" /> Profile
+          </Link>
+          <Link to="/sessions" className="flex items-center gap-2 text-gray-700 hover:text-black">
+            <Clock className="w-4 h-4" /> Sessions
+          </Link>
+          <Link to="/mentors" className="flex items-center gap-2 text-gray-700 hover:text-black">
+            <Clock className="w-4 h-4" /> Mentors
+          </Link>
+          <Link to="/feedback" className="flex items-center gap-2 text-gray-700 hover:text-black">
+            <Clock className="w-4 h-4" /> Feedback
+          </Link>
         </nav>
       </div>
       <div className="text-sm text-gray-500">

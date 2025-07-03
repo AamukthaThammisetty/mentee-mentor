@@ -11,12 +11,11 @@ models.Base.metadata.create_all(bind=database.engine)
 app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"], 
+    allow_origins=["http://localhost:5173"],  # or ["*"] for all origins (not recommended in prod)
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
 app.include_router(users.router, prefix="/api")
 app.include_router(protected.router, prefix="/api")
 app.include_router(mentors.router)
