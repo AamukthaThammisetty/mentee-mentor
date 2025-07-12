@@ -38,12 +38,12 @@ export default function Profile() {
 
         const data = await res.json();
         setUserData({
-          name: '',
-          email: '',
-          bio: '',
-          role: '',
-          skills: [],
-          avatar: '',
+          name: data.name || '',
+          email: data.email || '',
+          bio: data.bio || '',
+          role: data.is_mentor ? 'Mentor' : 'Mentee',
+          skills: data.skills || [],
+          avatar: data.avatar || '',
         });
 
       } catch (err) {
@@ -147,8 +147,9 @@ export default function Profile() {
       {/* Basic Info */}
       {/* Basic Info */}
       <div className="bg-white rounded-xl shadow p-4 flex items-center space-x-6">
-        <div>
+        <div className="relative w-24 h-24">
           <input
+            id="avatarInput"
             type="file"
             accept="image/*"
             onChange={(e) => {
@@ -161,13 +162,22 @@ export default function Profile() {
                 reader.readAsDataURL(file);
               }
             }}
+            className="hidden"
           />
-          <img
-            src={userData.avatar || '/avatar.jpg'}
-            alt="avatar"
-            className="w-20 h-20 rounded-full object-cover mt-2"
-          />
+          <label htmlFor="avatarInput" className="cursor-pointer">
+            <img
+              src={userData.avatar || '/avatar.jpg'}
+              alt="avatar"
+              className="w-24 h-24 rounded-full object-cover border-4 border-white shadow"
+            />
+            <div className="absolute bottom-0 right-0 bg-blue-600 rounded-full p-1">
+              <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M4 3a2 2 0 00-2 2v2h2V5h2V3H4zM2 11v2a2 2 0 002 2h2v-2H4v-2H2zm12 6v-2h-2v2h-2v2h2v-2h2zM16 5v2h2V5a2 2 0 00-2-2h-2v2h2zM12 3h-2v2h2V3zM6 19h2v-2H6v2zm10-8h-2v2h2v-2zm-4 2h-4v2h4v-2z" />
+              </svg>
+            </div>
+          </label>
         </div>
+
         <div>
           <input
             type="text"
