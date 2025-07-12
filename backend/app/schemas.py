@@ -12,6 +12,18 @@ class LoginInput(BaseModel):
     email: EmailStr
     password: str
    
+ #---------------------Sesssion-----------
+
+class SessionCreate(BaseModel):
+    title: str
+    description: str
+    time: datetime
+class SessionRequest(BaseModel):
+    mentor_id: int
+    topic: str
+    time: datetime
+
+
 # ------------------- USER -------------------
 
 class UserBase(BaseModel):
@@ -32,6 +44,7 @@ class UserPublic(BaseModel):
     name: str
     email: EmailStr
     is_mentor: bool
+    bio: Optional[str] = None
 
     class Config:
         orm_mode = True

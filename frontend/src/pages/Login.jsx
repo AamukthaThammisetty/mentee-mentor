@@ -21,13 +21,26 @@ export default function Login() {
 
       const token = response.data.access_token;
       localStorage.setItem("token", token); // ✅ store JWT token
+
+      // ✅ Fetch user info using token
+      const userRes = await axios.get("http://127.0.0.1:8000/api/users", {
+        params: { email },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const isMentor = userRes.data.is_mentor;
+      localStorage.setItem("isMentor", isMentor); // ✅ Store isMentor status
+
       alert("Login successful!");
-      navigate("/dashboard"); // ✅ redirect after login
+      navigate("/dashboard"); // ✅ Navigate after storing everything
     } catch (error) {
       alert("Login failed. Check your credentials.");
       console.error(error.response?.data);
     }
   };
+
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">

@@ -2,6 +2,40 @@ import React, { useEffect, useState } from "react";
 
 const Mentors = () => {
   const [mentors, setMentors] = useState([]);
+  const handleRequestSession = async (mentorId) => {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      alert("Please login first!");
+      return;
+    }
+
+    try {
+      console.log("Sending token:", token); // Debug
+      const res = await fetch("http://127.0.0.1:8000/api/sessions/request", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          mentor_id: mentorId,
+          topic: "Need help with backend",
+          time: new Date().toISOString(),
+        }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.detail || "Request failed");
+
+      alert("Session request sent!");
+    } catch (error) {
+      console.error("Error requesting session:", error.message);
+    }
+  };
+
+
+
 
   useEffect(() => {
     fetch("http://127.0.0.1:8000/api/mentors")
@@ -40,7 +74,7 @@ const Mentors = () => {
               <h3 className="text-lg font-semibold">{mentor.name}</h3>
               <p className="text-gray-500 text-sm mb-2">{mentor.email}</p>
               <p className="text-sm mb-3">
-                Java Backend Developer with 5+ years of experience in Spring Boot and scalable systems.
+                {mentor.bio}
               </p>
 
               {/* Tags */}
@@ -56,9 +90,13 @@ const Mentors = () => {
               </div>
             </div>
 
-            <button className="mt-auto bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg text-sm">
+            <button
+              className="mt-auto bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg text-sm"
+              onClick={() => handleRequestSession(mentor.id)}
+            >
               Request Session
             </button>
+
           </div>
         ))}
       </div>

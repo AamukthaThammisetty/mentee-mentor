@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app import models, database
 from app.routes import users,protected
 from app.routes import mentors,mentees,mentorship,messages
-
+from app.routes import sessions
 
 models.Base.metadata.create_all(bind=database.engine)
 
@@ -22,3 +22,4 @@ app.include_router(mentors.router)
 app.include_router(mentees.router)
 app.include_router(mentorship.router)
 app.include_router(messages.router)
+app.include_router(sessions.router)
