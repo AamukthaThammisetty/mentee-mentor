@@ -71,3 +71,16 @@ class Message(Base):
     sender_id = Column(String, ForeignKey("users.id"), nullable=False)
     content = Column(Text, nullable=False)
     timestamp = Column(DateTime, default=datetime.utcnow)
+
+class SessionRequest(Base):
+    __tablename__ = "session_requests"
+
+    id = Column(Integer, primary_key=True, index=True)
+    topic = Column(String)
+    requested_by_id = Column(Integer, ForeignKey("users.id"))
+    mentor_id = Column(Integer, ForeignKey("users.id"))
+    time = Column(DateTime)
+    status = Column(String, default="pending")  # "pending", "accepted", "rejected"
+
+    requested_by = relationship("User", foreign_keys=[requested_by_id])
+    mentor = relationship("User", foreign_keys=[mentor_id])

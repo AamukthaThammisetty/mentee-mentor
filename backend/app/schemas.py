@@ -23,6 +23,21 @@ class SessionRequest(BaseModel):
     topic: str
     time: datetime
 
+class SessionRequestCreate(BaseModel):
+    mentor_id: int
+    topic: str
+    time: datetime
+
+class SessionRequestResponse(BaseModel):
+    id: int
+    topic: str
+    time: datetime
+    requested_by_id: int
+    mentor_id: int
+    status: str
+
+    class Config:
+        orm_mode = True
 
 # ------------------- USER -------------------
 
