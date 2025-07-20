@@ -2,6 +2,7 @@
 from pydantic import BaseModel, EmailStr
 from typing import Optional, List
 from datetime import datetime
+
 # ------------------- AUTH -------------------
 
 class Token(BaseModel):
@@ -11,30 +12,48 @@ class Token(BaseModel):
 class LoginInput(BaseModel):
     email: EmailStr
     password: str
-   
- #---------------------Sesssion-----------
+
+#---------------------Session-----------
 
 class SessionCreate(BaseModel):
     title: str
     description: str
     time: datetime
+
 class SessionRequest(BaseModel):
     mentor_id: int
     topic: str
     time: datetime
+    description: Optional[str] = None  # ✅ Added description
 
 class SessionRequestCreate(BaseModel):
     mentor_id: int
     topic: str
     time: datetime
+    description: Optional[str] = None
 
 class SessionRequestResponse(BaseModel):
     id: int
     topic: str
+    description: Optional[str] = None
     time: datetime
     requested_by_id: int
     mentor_id: int
     status: str
+    created_at: datetime
+
+    class Config:
+        orm_mode = True
+
+class SessionResponse(BaseModel):
+    id: int
+    title: str
+    description: str
+    time: datetime
+    mentor_id: int
+    is_live: bool
+    meet_link: Optional[str] = None
+    created_at: datetime
 
     class Config:
         orm_mode = True
@@ -53,7 +72,6 @@ class UserUpdate(BaseModel):
     skills: Optional[List[str]] = []
     avatar: Optional[str] = None
 
-
 class UserPublic(BaseModel):
     id: int
     name: str
@@ -71,14 +89,17 @@ class UserCreate(BaseModel):
     is_mentor: bool
 
 class UserOut(BaseModel):
+    id: int  # ✅ Added id
     name: str
     email: str
     is_mentor: bool
     bio: Optional[str] = ""
     skills: Optional[List[str]] = []
     avatar: Optional[str] = None
+    
     class Config:
         orm_mode = True
+
 # ------------------- MENTORSHIP REQUESTS -------------------
 
 class MentorshipRequestCreate(BaseModel):
@@ -93,7 +114,6 @@ class MentorshipRequestOut(BaseModel):
 
     class Config:
         orm_mode = True
-
 
 # ------------------- MESSAGES -------------------
 

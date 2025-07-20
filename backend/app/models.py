@@ -31,6 +31,12 @@ class User(Base):
     # ✅ Sessions the user (mentee) has joined
     joined_sessions = relationship("Session", secondary=session_attendees, back_populates="attendees")
 
+    # ✅ Session requests the user made (as mentee)
+    made_requests = relationship("SessionRequest", foreign_keys="SessionRequest.requested_by_id", back_populates="requested_by")
+    
+    # ✅ Session requests received by the user (as mentor)
+    received_requests = relationship("SessionRequest", foreign_keys="SessionRequest.mentor_id", back_populates="mentor")
+
 class Session(Base):
     __tablename__ = "sessions"
 
@@ -38,8 +44,10 @@ class Session(Base):
     title = Column(String)
     description = Column(String)
     time = Column(DateTime)
-    mentor_id = Column(String, ForeignKey("users.id"))  # updated to match user id type
+    mentor_id = Column(Integer, ForeignKey("users.id"))  # ✅ Fixed to Integer
     is_live = Column(Boolean, default=False)
+    meet_link = Column(String, nullable=True)  # ✅ Added meet link
+    # created_at = Column(DateTime, default=datetime.utcnow)
 
     # ✅ Session creator (mentor)
     mentor = relationship("User", back_populates="created_sessions")
@@ -56,10 +64,12 @@ class MentorshipRequest(Base):
     __tablename__ = "mentorship_requests"
 
     id = Column(Integer, primary_key=True, index=True)
-    mentor_id = Column(String, ForeignKey("users.id"))
-    mentee_id = Column(String, ForeignKey("users.id"))
+    mentor_id = Column(Integer, ForeignKey("users.id"))  # ✅ Fixed to Integer
+    mentee_id = Column(Integer, ForeignKey("users.id"))  # ✅ Fixed to Integer
     status = Column(Enum(MentorshipStatus), default=MentorshipStatus.pending)
-
+    meet_link = Column(String, nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    
     mentor = relationship("User", foreign_keys=[mentor_id])
     mentee = relationship("User", foreign_keys=[mentee_id])
 
@@ -68,7 +78,7 @@ class Message(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     mentorship_id = Column(Integer, ForeignKey("mentorship_requests.id"), nullable=False)
-    sender_id = Column(String, ForeignKey("users.id"), nullable=False)
+    sender_id = Column(Integer, ForeignKey("users.id"), nullable=False)  # ✅ Fixed to Integer
     content = Column(Text, nullable=False)
     timestamp = Column(DateTime, default=datetime.utcnow)
 
@@ -77,10 +87,12 @@ class SessionRequest(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     topic = Column(String)
+    description = Column(Text, nullable=True)  # ✅ Added description
     requested_by_id = Column(Integer, ForeignKey("users.id"))
     mentor_id = Column(Integer, ForeignKey("users.id"))
     time = Column(DateTime)
     status = Column(String, default="pending")  # "pending", "accepted", "rejected"
+    created_at = Column(DateTime, default=datetime.utcnow)
 
-    requested_by = relationship("User", foreign_keys=[requested_by_id])
-    mentor = relationship("User", foreign_keys=[mentor_id])
+    requested_by = relationship("User", foreign_keys=[requested_by_id], back_populates="made_requests")
+    mentor = relationship("User", foreign_keys=[mentor_id], back_populates="received_requests")
